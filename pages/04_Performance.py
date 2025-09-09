@@ -19,37 +19,47 @@ def get_data() -> pd.DataFrame:
 data = get_data()
 
 def rulesbyapriori(data):
-    basket = data.pivot_table(index='BillNo' , columns='Itemname', values='Quantity').fillna(0) 
+    basket = data.pivot_table(index='BillNo', columns='Itemname', values='Quantity').fillna(0)
+
+    # Ubah ke boolean
+    basket = basket.applymap(lambda x: 1 if x > 0 else 0)
+    basket = basket.astype(bool)
 
     start_time = time.time()
     support = 0.02
-    frequent_items = apriori(basket, min_support=support , use_colnames=True)
+    frequent_items = apriori(basket, min_support=support, use_colnames=True)
     end_time = time.time()
     diffTime = end_time - start_time
 
     metric = "lift"
     min_threshold = 1
 
-    rules = association_rules(frequent_items, metric=metric, min_threshold=min_threshold)[["antecedents","consequents","support","confidence","lift"]]
+    rules = association_rules(frequent_items, metric=metric, min_threshold=min_threshold)[["antecedents", "consequents", "support", "confidence", "lift"]]
     rules.sort_values('confidence', ascending=False, inplace=True)
 
-    return rules,diffTime
+    return rules, diffTime
+
 
 def rulesbyfpgrowth(data):
-    basket = data.pivot_table(index='BillNo' , columns='Itemname', values='Quantity').fillna(0) 
+    basket = data.pivot_table(index='BillNo', columns='Itemname', values='Quantity').fillna(0)
+
+    # Ubah ke boolean
+    basket = basket.applymap(lambda x: 1 if x > 0 else 0)
+    basket = basket.astype(bool)
 
     start_time = time.time()
     support = 0.02
-    frequent_items = fpgrowth(basket, min_support=support , use_colnames=True)
+    frequent_items = fpgrowth(basket, min_support=support, use_colnames=True)
     end_time = time.time()
     diffTime = end_time - start_time
+
     metric = "lift"
     min_threshold = 1
 
-    rules = association_rules(frequent_items, metric=metric, min_threshold=min_threshold)[["antecedents","consequents","support","confidence","lift"]]
+    rules = association_rules(frequent_items, metric=metric, min_threshold=min_threshold)[["antecedents", "consequents", "support", "confidence", "lift"]]
     rules.sort_values('confidence', ascending=False, inplace=True)
 
-    return rules,diffTime
+    return rules, diffTime
 
 def parse_list(x):
     x = list(x)
