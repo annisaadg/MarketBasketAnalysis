@@ -13,7 +13,7 @@ with st.spinner('Harap tunggu,sedang memuat data...'):
     time.sleep(3)
 
 def get_data() -> pd.DataFrame:
-    df = pd.read_csv("./datasets/datasets2Encode.csv")
+    df = pd.read_csv("./datasets/datasets2Encode.csv", low_memory=False)
     return df
 
 data = get_data()
