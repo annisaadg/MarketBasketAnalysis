@@ -12,11 +12,11 @@ st.set_page_config(layout="wide",page_title="Fitur")
 # Using object notation
 add_selectbox = st.sidebar.selectbox(
     "Fitur ",
-    ("Stock Recommendation","Bundling Package Recommendation")
+    ("Best Selling Products","Bundling Package Recommendation")
 )
 
-if(add_selectbox == "Stock Recommendation"):
-    st.write("""# Stock Recommendation""")
+if(add_selectbox == "Best Selling Products"):
+    st.write("""# Best Selling Products""")
 
 
     df = pd.read_excel("datasets/Test2.xlsx")
