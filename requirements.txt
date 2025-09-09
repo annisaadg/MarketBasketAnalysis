@@ -5,3 +5,4 @@ mlxtend
 matplotlib
 seaborn
 streamlit
+openpyxl
