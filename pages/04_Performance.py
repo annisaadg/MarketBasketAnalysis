@@ -21,9 +21,8 @@ data = get_data()
 def rulesbyapriori(data):
     basket = data.pivot_table(index='BillNo', columns='Itemname', values='Quantity').fillna(0)
 
-    # Ubah ke boolean
-    basket = basket.applymap(lambda x: 1 if x > 0 else 0)
-    basket = basket.astype(bool)
+    # Ubah ke boolean tanpa applymap
+    basket = basket.gt(0)  # semua >0 jadi True, 0 jadi False
 
     start_time = time.time()
     support = 0.02
@@ -34,7 +33,9 @@ def rulesbyapriori(data):
     metric = "lift"
     min_threshold = 1
 
-    rules = association_rules(frequent_items, metric=metric, min_threshold=min_threshold)[["antecedents", "consequents", "support", "confidence", "lift"]]
+    rules = association_rules(frequent_items, metric=metric, min_threshold=min_threshold)[
+        ["antecedents", "consequents", "support", "confidence", "lift"]
+    ]
     rules.sort_values('confidence', ascending=False, inplace=True)
 
     return rules, diffTime
@@ -44,8 +45,7 @@ def rulesbyfpgrowth(data):
     basket = data.pivot_table(index='BillNo', columns='Itemname', values='Quantity').fillna(0)
 
     # Ubah ke boolean
-    basket = basket.applymap(lambda x: 1 if x > 0 else 0)
-    basket = basket.astype(bool)
+    basket = basket.gt(0)
 
     start_time = time.time()
     support = 0.02
@@ -56,7 +56,9 @@ def rulesbyfpgrowth(data):
     metric = "lift"
     min_threshold = 1
 
-    rules = association_rules(frequent_items, metric=metric, min_threshold=min_threshold)[["antecedents", "consequents", "support", "confidence", "lift"]]
+    rules = association_rules(frequent_items, metric=metric, min_threshold=min_threshold)[
+        ["antecedents", "consequents", "support", "confidence", "lift"]
+    ]
     rules.sort_values('confidence', ascending=False, inplace=True)
 
     return rules, diffTime
